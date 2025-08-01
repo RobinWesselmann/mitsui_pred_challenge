@@ -1,0 +1,96 @@
+[project]
+name = "mitsui-pred-challenge"
+version = "0.1.0"
+description = "The present project is a forecasting prediction challenge hosted on kaggle. The goal is to come up with a robust model capable of predicting future commodity returns using historical data from London Metal Exchange (LME), Japan Exchange Group (JPX), US Stock, and Forex markets. Leveraging insights from these diverse datasets is key to building stable, long-term forecasts crucial for optimizing trading strategies and managing risk in global commodity markets."
+authors = [
+    {name = "RW",email = "nomail@example.com"}
+]
+readme = "README.md"
+packages = [
+    
+]
+
+[tool.poetry.group.dev.dependencies]
+ruff = "~0.9.6"
+
+[tool.poetry]
+packages = [{include = "mitsui_pred_challenge", from = "src"}]
+
+[tool.ruff]
+fix = true
+line-length = 120
+force-exclude = true # Force the excludes also for ruff pre-commit hook
+
+[tool.ruff.lint]
+extend-select = [
+    "E", "W",   # Pycodestyle (Error & Warnings)
+    "ANN",      # Enforce type annotations
+    "T10",      # Debugger rules
+    "S",        # Security checks
+    "D",        # Pydocstyle with convention stated in `tool.ruff.lint.pydocstyle`
+    "UP",       # Pyupgrade
+    "N",        # PEP8 naming conventions
+    "I",        # Isort rules
+    "COM",      # flake8 commas
+    "A",        # flake8-builtins
+    "BLE",      # flake8-blind-except
+    "DTZ",      # flake8-datetimez
+    "ICN",      # flake8-import-conventions
+    "LOG",      # flake8-logging
+    "PT",       # flake8-pytest-style
+    "RET",      # flake8-return
+    "SIM",      # flake8-simplify
+    "TID",      # flake8-tidy-imports
+    "ARG",      # flake8-unused-arguments
+    "ISC",      # flake8-implicit-str-concat
+]
+
+ignore = [
+    # Disabling conflicting lint rules when using ruff formatter
+    # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "D206",
+    "D300",
+    "COM812",
+    "COM819",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "ANN",  # Type annotations
+    "S101", # Assert statements
+    "S320", # Checks for uses of insecure XML parsers.
+    "ARG",  # Unused args as fs and mock will not directly get called
+]
+"__init__.py" = [
+    "E402", # Import violations
+]
+"!src/**/*.py" = ["D"] # Ignore D rules everywhere except source dir
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.format]
+indent-style = "tab"
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.11"
+ipykernel = "^6.29.5"
+pandas = "^2.3.0"
+xlsxwriter = "^3.2.3"
+matplotlib = "^3.10.3"
+seaborn = "0.13.2"
+scikit-learn = "^1.7.0"
+dtreeviz = "^2.2.2"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
