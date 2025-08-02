@@ -7,7 +7,7 @@ authors = [
 ]
 readme = "README.md"
 packages = [
-    
+    { include = "mitsui_pred_challenge", from = "src" },
 ]
 
 [tool.poetry.group.dev.dependencies]
