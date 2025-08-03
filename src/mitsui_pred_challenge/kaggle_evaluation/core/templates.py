@@ -10,15 +10,15 @@ from typing import Any, Callable, Generator, Optional, Tuple, Union
 import pandas as pd
 import polars as pl
 
-import kaggle_evaluation.core.base_gateway
-import kaggle_evaluation.core.relay
+import core.base_gateway
+import core.relay
 
 
 _initial_import_time = time.time()
 _issued_startup_time_warning = False
 
 
-class Gateway(kaggle_evaluation.core.base_gateway.BaseGateway, abc.ABC):
+class Gateway(core.base_gateway.BaseGateway, abc.ABC):
     """
     Template to start with when writing a new gateway.
     In most cases, hosts should only need to edit the three abstract methods below.
@@ -73,10 +73,10 @@ class InferenceServer(abc.ABC):
     """
 
     def __init__(self, *endpoint_listeners: Callable):
-        self.server = kaggle_evaluation.core.relay.define_server(*endpoint_listeners)
+        self.server = core.relay.define_server(*endpoint_listeners)
         self.client = None  # The inference_server can have a client but it isn't typically necessary.
         self._issued_startup_time_warning = False
-        self._startup_limit_seconds = kaggle_evaluation.core.relay.STARTUP_LIMIT_SECONDS
+        self._startup_limit_seconds = core.relay.STARTUP_LIMIT_SECONDS
 
     def serve(self) -> None:
         self.server.start()

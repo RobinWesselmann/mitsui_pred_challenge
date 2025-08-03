@@ -6,11 +6,11 @@ from pathlib import Path
 import pandas as pd
 import polars as pl
 
-import kaggle_evaluation.core.base_gateway
-import kaggle_evaluation.core.templates
+import core.base_gateway
+import core.templates
 
 
-class MitsuiGateway(kaggle_evaluation.core.templates.Gateway):
+class MitsuiGateway(core.templates.Gateway):
     def __init__(self, data_paths: tuple[str] | None = None):
         super().__init__(data_paths, file_share_dir=None)
         self.data_paths = data_paths

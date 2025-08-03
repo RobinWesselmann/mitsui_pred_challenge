@@ -21,8 +21,8 @@ import pyarrow
 
 from grpc._channel import _InactiveRpcError
 
-import kaggle_evaluation.core.generated.kaggle_evaluation_pb2 as kaggle_evaluation_proto
-import kaggle_evaluation.core.generated.kaggle_evaluation_pb2_grpc as kaggle_evaluation_grpc
+import core.generated.kaggle_evaluation_pb2 as kaggle_evaluation_proto
+import core.generated.kaggle_evaluation_pb2_grpc as kaggle_evaluation_grpc
 
 
 class GRPCDeadlineError(Exception):

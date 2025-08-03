@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-import kaggle_evaluation.core.relay
+import core.relay
 
 
 _DATAFRAME_LIKE_TYPES = (pl.DataFrame, pl.Series, pd.DataFrame, pd.Series)
@@ -70,7 +70,7 @@ class BaseGateway:
             target_column_name: Sets the submission file target column name if predict() does not return a named DataFrame or Series.
             row_id_column_name: Sets the submission file row ID column name if generate_data_batches() does not return row IDs as a named DataFrame or Series.
         """
-        self.client = kaggle_evaluation.core.relay.Client('inference_server' if IS_RERUN else 'localhost')
+        self.client = core.relay.Client('inference_server' if IS_RERUN else 'localhost')
         self.server = None  # The gateway can have a server but it isn't typically necessary.
         # Off Kaggle, we can accept a user input file_share_dir. On Kaggle, we need to use the special directory
         # that is visible to the user.
@@ -119,22 +119,22 @@ class BaseGateway:
             self.unpack_data_paths()
             predictions, row_ids = self.get_all_predictions()
             self.write_submission(predictions, row_ids)
-        except kaggle_evaluation.core.base_gateway.GatewayRuntimeError as gre:
+        except core.base_gateway.GatewayRuntimeError as gre:
             error = gre
         except Exception:
             # Get the full stack trace
             exc_type, exc_value, exc_traceback = sys.exc_info()
             error_str = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
 
-            error = kaggle_evaluation.core.base_gateway.GatewayRuntimeError(
-                kaggle_evaluation.core.base_gateway.GatewayRuntimeErrorType.GATEWAY_RAISED_EXCEPTION, error_str
+            error = core.base_gateway.GatewayRuntimeError(
+                core.base_gateway.GatewayRuntimeErrorType.GATEWAY_RAISED_EXCEPTION, error_str
             )
 
         self.client.close()
         if self.server:
             self.server.stop(0)
 
-        if kaggle_evaluation.core.base_gateway.IS_RERUN:
+        if core.base_gateway.IS_RERUN:
             self.write_result(error)
         elif error:
             # For local testing
@@ -370,7 +370,7 @@ class BaseGateway:
             raise GatewayRuntimeError(GatewayRuntimeErrorType.SERVER_RAISED_EXCEPTION, message) from None
         if isinstance(exception, grpc._channel._InactiveRpcError):
             raise GatewayRuntimeError(GatewayRuntimeErrorType.SERVER_CONNECTION_FAILED, exception_str) from None
-        if isinstance(exception, kaggle_evaluation.core.relay.GRPCDeadlineError):
+        if isinstance(exception, core.relay.GRPCDeadlineError):
             raise GatewayRuntimeError(GatewayRuntimeErrorType.GRPC_DEADLINE_EXCEEDED, exception_str) from None
 
         raise exception
